@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f1eb">
+  <title>회원가입 | OWCS Korea</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f1eb;
+      --text: #17191d;
+      --muted: #777a80;
+      --line: #e5e4e0;
+      --accent: #176c49;
+      --error: #b42336;
+    }
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 28px 16px;
+      color: var(--text);
+      background: radial-gradient(ellipse at 50% 0%, #fff 0, transparent 48%), var(--bg);
+      font-family: "Noto Sans KR", Pretendard, Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, input { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    .page { width: min(100%, 420px); }
+    .brand { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:20px; font-size:13px; font-weight:900; letter-spacing:.08em; }
+    .brand-mark { width:34px; height:34px; display:grid; place-items:center; border-radius:50%; color:#fff; background:#15171c; font-size:11px; letter-spacing:-.04em; }
+    .card { padding:clamp(24px,7vw,38px); border:1px solid rgba(30,32,36,.08); border-radius:18px; background:rgba(255,255,255,.94); box-shadow:0 18px 55px rgba(27,30,35,.09); }
+    .eyebrow { margin:0 0 8px; color:var(--accent); font-size:10px; font-weight:900; letter-spacing:.16em; }
+    h1 { margin:0; font-size:28px; letter-spacing:-.055em; }
+    .intro { margin:8px 0 25px; color:var(--muted); font-size:13px; line-height:1.7; }
+    .field { margin-top:16px; }
+    label { display:block; margin-bottom:7px; font-size:12px; font-weight:800; }
+    input { width:100%; height:47px; padding:0 13px; border:1px solid var(--line); border-radius:9px; outline:0; color:var(--text); background:#fff; transition:border-color .15s,box-shadow .15s; }
+    input::placeholder { color:#a4a6aa; }
+    input:focus { border-color:#797d84; box-shadow:0 0 0 3px rgba(31,35,42,.08); }
+    .hint { margin:7px 0 0; color:var(--muted); font-size:10px; }
+    .message { display:none; margin:16px 0 0; padding:11px 12px; border-radius:8px; font-size:12px; line-height:1.65; }
+    .message.show { display:block; }
+    .message.error { color:var(--error); background:#fff1f2; }
+    .message.success { color:#145c3d; background:#edf8f1; }
+    .message.info { color:#454950; background:#f1f2f3; }
+    .submit { width:100%; min-height:48px; margin-top:22px; border:0; border-radius:999px; color:#fff; background:#17191d; font-size:13px; font-weight:800; cursor:pointer; transition:transform .15s,background .15s; }
+    .submit:hover:not(:disabled) { transform:translateY(-1px); background:#30333a; }
+    .submit:disabled { cursor:not-allowed; opacity:.55; }
+    .submit:focus-visible, a:focus-visible { outline:3px solid rgba(22,115,75,.45); outline-offset:3px; }
+    .back { display:block; margin-top:19px; color:var(--muted); text-align:center; font-size:11px; font-weight:700; }
+    .back:hover { color:var(--text); }
+    .config-note { margin:16px 0 0; padding:11px 12px; border:1px solid #ead9a6; border-radius:8px; color:#68551d; background:#fff9e8; font-size:11px; line-height:1.65; }
+    .config-note[hidden] { display:none; }
+    @media (max-width:360px) { .card { padding:24px 20px; } h1 { font-size:25px; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <a class="brand" href="owcs.html" aria-label="OWCS Korea 홈으로">
+      <span class="brand-mark">OW</span><span>OWCS KOREA</span>
+    </a>
+    <section class="card" aria-labelledby="signupTitle">
+      <p class="eyebrow">JOIN THE COMMUNITY</p>
+      <h1 id="signupTitle">회원가입</h1>
+      <p class="intro">OWCS Korea 팬 페이지 계정을 만들어 보세요.</p>
+
+      <form id="signupForm" novalidate>
+        <div class="field">
+          <label for="nickname">닉네임</label>
+          <input id="nickname" name="nickname" type="text" autocomplete="nickname" maxlength="30" placeholder="사용할 닉네임" required>
+        </div>
+        <div class="field">
+          <label for="email">이메일</label>
+          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder="name@example.com" required>
+        </div>
+        <div class="field">
+          <label for="password">비밀번호</label>
+          <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" placeholder="8자 이상 입력" required>
+          <p class="hint">비밀번호는 8자 이상 입력해 주세요.</p>
+        </div>
+        <div class="field">
+          <label for="passwordConfirm">비밀번호 확인</label>
+          <input id="passwordConfirm" name="passwordConfirm" type="password" autocomplete="new-password" minlength="8" placeholder="비밀번호를 다시 입력" required>
+        </div>
+        <p id="formMessage" class="message" role="status" aria-live="polite"></p>
+        <button id="submitButton" class="submit" type="submit">계정 만들기</button>
+      </form>
+      <p id="configNote" class="config-note" hidden>연결 설정이 필요합니다. 아래쪽 코드의 Supabase 프로젝트 URL과 공개 키를 입력해 주세요. 브라우저에는 <b>service_role 키를 넣지 마세요.</b></p>
+      <a class="back" href="owcs.html">← OWCS 페이지로 돌아가기</a>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (() => {
+      // Supabase Dashboard → Project Settings → API에서 Project URL과 publishable/anon key를 복사하세요.
+      // 브라우저 코드에는 publishable(anon) key만 사용합니다. service_role 키는 넣지 마세요.
+      const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
+      const SUPABASE_PUBLISHABLE_KEY = 'YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY';
+
+      const form = document.getElementById('signupForm');
+      const message = document.getElementById('formMessage');
+      const submitButton = document.getElementById('submitButton');
+      const configNote = document.getElementById('configNote');
+      const password = document.getElementById('password');
+      const passwordConfirm = document.getElementById('passwordConfirm');
+      const configured = !SUPABASE_URL.includes('YOUR_') && !SUPABASE_PUBLISHABLE_KEY.includes('YOUR_');
+      let supabaseClient;
+
+      function showMessage(text, type) {
+        message.textContent = text;
+        message.className = `message show ${type}`;
+      }
+
+      function getErrorMessage(error) {
+        const details = `${error?.message || ''} ${error?.code || ''}`.toLowerCase();
+        if (details.includes('password') && (details.includes('weak') || details.includes('short') || details.includes('least'))) {
+          return 'Supabase 프로젝트의 비밀번호 기준을 확인해 주세요.';
+        }
+        if (details.includes('email') && (details.includes('invalid') || details.includes('valid'))) {
+          return '이메일 주소를 다시 확인해 주세요.';
+        }
+        if (details.includes('rate limit') || details.includes('too many')) {
+          return '요청이 잠시 많습니다. 잠시 후 다시 시도해 주세요.';
+        }
+        if (details.includes('fetch') || details.includes('network')) {
+          return 'Supabase에 연결할 수 없습니다. 네트워크와 프로젝트 URL을 확인해 주세요.';
+        }
+        return '회원가입을 완료하지 못했습니다. 입력 내용을 확인하고 다시 시도해 주세요.';
+      }
+
+      if (!configured) {
+        configNote.hidden = false;
+        showMessage('먼저 Supabase 프로젝트 URL과 공개 키를 설정해 주세요.', 'info');
+        submitButton.disabled = true;
+        return;
+      }
+
+      if (!window.supabase?.createClient) {
+        showMessage('Supabase 라이브러리를 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.', 'error');
+        submitButton.disabled = true;
+        return;
+      }
+
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        message.className = 'message';
+        if (!form.reportValidity()) return;
+
+        if (password.value !== passwordConfirm.value) {
+          showMessage('비밀번호가 서로 일치하지 않습니다.', 'error');
+          passwordConfirm.focus();
+          return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = '가입 처리 중…';
+        try {
+          const { data, error } = await supabaseClient.auth.signUp({
+            email: document.getElementById('email').value.trim(),
+            password: password.value,
+            options: {
+              data: { nickname: document.getElementById('nickname').value.trim() }
+            }
+          });
+          if (error) throw error;
+
+          form.reset();
+          if (data.session) {
+            showMessage('회원가입이 완료되었습니다. OWCS 페이지로 돌아가 이용할 수 있습니다.', 'success');
+          } else {
+            showMessage('가입 요청을 처리했습니다. 이메일 확인이 필요한 경우 받은 편지함에서 인증 링크를 눌러 주세요.', 'success');
+          }
+          submitButton.textContent = '가입 완료';
+        } catch (error) {
+          showMessage(getErrorMessage(error), 'error');
+          submitButton.disabled = false;
+          submitButton.textContent = '계정 만들기';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

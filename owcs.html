@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b13">
+  <title>OWCS KOREA — 2026 Stage 3</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b13;
+      --surface: #101521;
+      --surface-2: #151c2b;
+      --line: rgba(185, 202, 234, .12);
+      --text: #f4f6fb;
+      --muted: #929db1;
+      --blue: #75a9ff;
+      --blue-bright: #9dc1ff;
+      --orange: #ff9b62;
+      --green: #63e6a1;
+      --red: #ff6878;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Noto Sans KR", Pretendard, Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      min-width: 320px;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { color: inherit; font: inherit; }
+    .topbar {
+      height: 66px;
+      padding: 0 max(24px, calc((100% - 1180px) / 2));
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(8, 11, 19, .9); border-bottom: 1px solid rgba(255,255,255,.07);
+      backdrop-filter: blur(18px);
+    }
+    .brand { display:flex; align-items:center; gap:11px; font-weight:900; letter-spacing:.08em; white-space:nowrap; }
+    .brand-mark { width:31px; height:31px; display:grid; place-items:center; border-radius:9px; background:linear-gradient(145deg,#8bb8ff,#3971d2); color:#07111e; font-size:12px; font-weight:1000; box-shadow:0 4px 18px rgba(71,132,241,.23); }
+    .brand small { display:block; font-size:8px; color:var(--muted); letter-spacing:.24em; margin-top:1px; }
+    nav { display:flex; align-items:center; gap:28px; height:100%; }
+    nav a { height:100%; display:flex; align-items:center; position:relative; color:#aab2c2; font-size:12px; font-weight:700; transition:color .16s; }
+    nav a:hover, nav a.active { color:#fff; }
+    nav a.active::after { content:""; position:absolute; height:2px; background:var(--blue); left:0; right:0; bottom:0; border-radius:2px 2px 0 0; }
+    .signup-link { padding:0 15px; white-space:nowrap; }
+    .season-tag { display:flex; align-items:center; gap:8px; color:#cbd3e2; font-size:10px; font-weight:800; letter-spacing:.08em; border:1px solid var(--line); background:#111725; padding:8px 12px; border-radius:999px; white-space:nowrap; }
+    .season-tag i { width:7px; height:7px; background:var(--blue); border-radius:50%; box-shadow:0 0 12px rgba(117,169,255,.8); }
+    .wrap { width:min(1180px, calc(100% - 40px)); margin:0 auto; }
+    .hero {
+      position:relative; overflow:hidden; min-height:400px; padding:63px 0 45px;
+      background:radial-gradient(ellipse at 75% 42%, rgba(44,83,151,.32), transparent 38%), linear-gradient(110deg,#0b101b 0%,#101828 48%,#10182a 100%);
+      border-bottom:1px solid var(--line);
+    }
+    .hero::before, .hero::after { content:""; position:absolute; pointer-events:none; border:1px solid rgba(142,180,255,.09); border-radius:50%; width:450px; height:450px; right:8%; top:-235px; box-shadow:0 0 0 44px rgba(142,180,255,.025),0 0 0 91px rgba(142,180,255,.018); }
+    .hero::after { width:245px; height:245px; right:24%; top:150px; border-color:rgba(255,255,255,.045); box-shadow:0 0 80px rgba(70,121,216,.08); }
+    .hero-inner { position:relative; z-index:1; display:grid; grid-template-columns:1.2fr .8fr; gap:36px; align-items:center; }
+    .overline { display:flex; align-items:center; gap:9px; color:#b9c8e4; font-size:10px; font-weight:900; letter-spacing:.19em; }
+    .overline .line { width:25px; height:2px; background:var(--blue); }
+    h1 { margin:16px 0 11px; max-width:690px; font-size:clamp(38px,6.2vw,72px); line-height:.99; letter-spacing:-.065em; font-weight:950; }
+    h1 span { color:var(--blue-bright); }
+    .hero-copy { margin:0; max-width:480px; color:#aab4c8; font-size:14px; line-height:1.8; }
+    .hero-meta { margin-top:25px; display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+    .hero-pill { display:inline-flex; align-items:center; gap:7px; padding:8px 12px; border-radius:999px; border:1px solid rgba(189,204,230,.15); background:rgba(14,20,33,.72); color:#d3dbea; font-size:10px; font-weight:700; }
+    .hero-pill strong { color:white; }
+    .hero-pill svg { width:13px; height:13px; color:#95baff; }
+    .hero-feature { justify-self:end; width:min(100%, 360px); padding:22px; position:relative; border:1px solid rgba(176,199,240,.16); border-radius:14px; background:linear-gradient(145deg,rgba(25,36,57,.92),rgba(13,19,31,.92)); box-shadow:0 22px 70px rgba(0,0,0,.32); }
+    .feature-top { display:flex; justify-content:space-between; align-items:center; gap:10px; color:#9faac0; font-size:9px; font-weight:900; letter-spacing:.15em; }
+    .live-badge { display:flex; align-items:center; gap:6px; color:#a8e7c4; letter-spacing:.09em; }
+    .live-badge i { width:6px; height:6px; background:var(--green); border-radius:50%; box-shadow:0 0 10px rgba(99,230,161,.7); }
+    .feature-date { font-size:12px; color:#a8b2c7; margin-top:24px; }
+    .feature-date strong { color:#fff; font-size:17px; margin-right:7px; }
+    .versus { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px; margin:16px 0 18px; }
+    .versus-team { display:flex; flex-direction:column; align-items:center; gap:9px; text-align:center; font-size:11px; font-weight:800; }
+    .team-emblem { width:52px; height:52px; display:grid; place-items:center; border-radius:15px; color:var(--team-color,#a5c4ff); font-size:12px; font-weight:1000; letter-spacing:-.04em; background:linear-gradient(145deg,rgba(116,157,225,.2),rgba(44,60,92,.15)); border:1px solid rgba(174,199,240,.22); box-shadow:inset 0 1px rgba(255,255,255,.08); }
+    .versus-mark { color:#67748c; font-size:11px; font-weight:900; letter-spacing:.12em; }
+    .feature-foot { display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,.08); padding-top:13px; color:#9faac0; font-size:10px; }
+    .feature-foot b { color:#dfe7f7; }
+    .countdown { color:var(--blue-bright); font-weight:900; font-variant-numeric:tabular-nums; }
+    .content { padding:34px 0 70px; }
+    .stats-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--line); margin-bottom:47px; }
+    .stat { padding:16px 20px; background:#0e131e; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .stat span { color:var(--muted); font-size:10px; font-weight:700; }
+    .stat strong { color:#fff; font-size:17px; letter-spacing:-.03em; }
+    .stat strong em { color:var(--blue-bright); font-size:10px; font-style:normal; margin-left:3px; }
+    .section { margin-top:45px; }
+    .section-head { display:flex; justify-content:space-between; align-items:end; gap:18px; margin-bottom:18px; }
+    .section-kicker { color:var(--blue); font-size:9px; font-weight:900; letter-spacing:.19em; margin-bottom:5px; }
+    h2 { margin:0; font-size:24px; letter-spacing:-.045em; line-height:1.2; }
+    .section-desc { margin:6px 0 0; color:var(--muted); font-size:11px; }
+    .text-link { color:#bcd2fa; font-size:10px; font-weight:800; display:flex; gap:6px; align-items:center; white-space:nowrap; }
+    .text-link:hover { color:#fff; }
+    .schedule-toolbar { display:flex; align-items:center; gap:7px; margin-bottom:13px; flex-wrap:wrap; }
+    .filter-button { padding:7px 13px; border:1px solid var(--line); background:#0d121d; color:#a6b0c2; border-radius:999px; font-size:10px; font-weight:800; cursor:pointer; transition:.16s; }
+    .filter-button:hover { border-color:rgba(139,177,242,.45); color:#fff; }
+    .filter-button.active { color:#07111e; background:#a7c7ff; border-color:#a7c7ff; }
+    .schedule-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:11px; }
+    .day-card { border:1px solid var(--line); border-radius:10px; background:var(--surface); overflow:hidden; transition:transform .18s,border-color .18s; }
+    .day-card:hover { transform:translateY(-2px); border-color:rgba(146,180,237,.29); }
+    .day-head { padding:14px 15px 12px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,.07); }
+    .day-date { display:flex; align-items:center; gap:10px; }
+    .date-box { width:35px; height:37px; display:grid; place-content:center; text-align:center; background:#1b2639; border-radius:7px; line-height:1; }
+    .date-box b { font-size:14px; }
+    .date-box small { color:#a8b5cc; font-size:8px; margin-top:4px; }
+    .day-info strong { display:block; font-size:11px; }
+    .day-info small { color:var(--muted); font-size:9px; }
+    .stage-badge { color:#b5cfff; border:1px solid rgba(117,169,255,.2); background:rgba(70,115,187,.11); padding:5px 7px; border-radius:5px; font-size:8px; font-weight:900; letter-spacing:.06em; }
+    .fixture-list { padding:2px 14px 8px; }
+    .fixture { min-height:53px; display:grid; grid-template-columns:1fr auto 1fr; gap:9px; align-items:center; border-bottom:1px solid rgba(255,255,255,.055); }
+    .fixture:last-child { border-bottom:0; }
+    .fixture-team { display:flex; align-items:center; gap:7px; font-size:9px; font-weight:800; min-width:0; }
+    .fixture-team.away { justify-content:flex-end; text-align:right; }
+    .mini-mark { width:23px; height:23px; flex:0 0 23px; display:grid; place-items:center; border-radius:7px; font-size:7px; font-weight:1000; color:var(--team-color,#bdd3fb); border:1px solid rgba(174,199,240,.15); background:rgba(84,111,158,.14); }
+    .fixture-team span.name { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+    .fixture-score { color:#8290a8; font-size:9px; font-weight:900; letter-spacing:.08em; white-space:nowrap; }
+    .fixture-score.upcoming { color:#9aabc7; font-size:8px; }
+    .fixture-time { color:#77839a; font-size:8px; text-align:center; padding:0 0 10px; }
+    .empty-state { display:none; grid-column:1/-1; padding:25px; color:var(--muted); text-align:center; border:1px dashed var(--line); border-radius:10px; }
+    .standings-layout { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(230px,.75fr); gap:14px; align-items:start; }
+    .table-card, .leader-card { border:1px solid var(--line); border-radius:10px; background:var(--surface); overflow:hidden; }
+    .table-top { display:flex; justify-content:space-between; align-items:center; padding:15px 17px; border-bottom:1px solid var(--line); }
+    .table-top strong { font-size:12px; }
+    .as-of { color:#8591a5; font-size:9px; }
+    .table-scroll { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; min-width:540px; text-align:left; }
+    th { padding:10px 13px; color:#8490a5; font-size:8px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; background:rgba(255,255,255,.018); }
+    td { padding:11px 13px; border-top:1px solid rgba(255,255,255,.045); color:#dce2ec; font-size:10px; font-variant-numeric:tabular-nums; }
+    tbody tr { cursor:pointer; transition:background .15s; }
+    tbody tr:hover { background:rgba(130,169,236,.07); }
+    .rank { color:#9aa6ba; width:38px; font-weight:900; }
+    .rank.top { color:#a8c9ff; }
+    .stand-team { display:flex; align-items:center; gap:9px; min-width:160px; font-weight:800; }
+    .stand-team .mini-mark { width:25px; height:25px; flex-basis:25px; }
+    .record { color:#9ca9bc; }
+    .win-rate { color:#dce5f5; font-weight:800; }
+    .qualify { color:#8de3b1; font-size:8px; font-weight:800; }
+    .leader-card { padding:16px; }
+    .leader-card h3 { margin:0 0 3px; font-size:13px; }
+    .leader-intro { color:var(--muted); font-size:9px; margin-bottom:14px; }
+    .leader-row { display:flex; align-items:center; gap:10px; padding:11px 0; border-top:1px solid rgba(255,255,255,.06); }
+    .leader-number { color:#697892; font-size:9px; font-weight:900; width:16px; }
+    .leader-info { flex:1; min-width:0; }
+    .leader-info strong { display:block; font-size:10px; }
+    .leader-info small { color:var(--muted); font-size:8px; }
+    .leader-stat { color:#c6d9fb; font-size:11px; font-weight:900; }
+    .team-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:11px; }
+    .team-card { min-height:128px; padding:16px; border:1px solid var(--line); border-radius:10px; background:linear-gradient(145deg,#111725,#0d121c); cursor:pointer; transition:transform .17s,border-color .17s,background .17s; text-align:left; width:100%; }
+    .team-card:hover { transform:translateY(-3px); border-color:rgba(141,178,240,.34); background:linear-gradient(145deg,#151f31,#0e1420); }
+    .team-card-head { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .team-lockup { display:flex; align-items:center; gap:10px; min-width:0; }
+    .team-card .team-emblem { width:42px; height:42px; flex:0 0 42px; border-radius:11px; font-size:10px; }
+    .team-name { min-width:0; }
+    .team-name strong { display:block; font-size:11px; line-height:1.3; }
+    .team-name small { color:#828ea3; display:block; font-size:8px; margin-top:4px; }
+    .team-arrow { color:#66748e; font-size:15px; }
+    .team-card-foot { margin-top:15px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,.06); padding-top:10px; color:#8c98ab; font-size:8px; }
+    .roster-count { color:#b9cce9; font-weight:800; }
+    .team-card-foot b { color:#e4eaf4; font-size:9px; }
+    .bottom-cta { margin-top:47px; display:flex; align-items:center; justify-content:space-between; gap:22px; padding:22px 25px; border-radius:11px; background:linear-gradient(100deg,#101c30,#101522 75%); border:1px solid rgba(140,175,234,.15); }
+    .bottom-cta strong { font-size:14px; }
+    .bottom-cta p { margin:4px 0 0; color:var(--muted); font-size:10px; }
+    .cta-links { display:flex; gap:8px; flex-wrap:wrap; }
+    .outline-link { padding:9px 12px; border:1px solid rgba(184,204,238,.17); border-radius:999px; color:#d2def1; font-size:9px; font-weight:800; white-space:nowrap; }
+    .outline-link:hover { background:#1b273a; border-color:#789bd1; }
+    footer { border-top:1px solid var(--line); padding:20px 0 30px; color:#69758a; font-size:9px; }
+    .footer-inner { display:flex; justify-content:space-between; gap:18px; align-items:center; }
+    .footer-links { display:flex; gap:15px; flex-wrap:wrap; }
+    .footer-links a:hover { color:#c8d5ea; }
+    dialog { width:min(620px,calc(100% - 28px)); max-height:min(780px,calc(100% - 28px)); padding:0; border:1px solid rgba(179,201,240,.2); border-radius:14px; color:var(--text); background:#101521; box-shadow:0 25px 90px rgba(0,0,0,.7); }
+    dialog::backdrop { background:rgba(2,4,8,.76); backdrop-filter:blur(5px); }
+    .modal-head { padding:20px 22px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); background:linear-gradient(100deg,#17243a,#101521); }
+    .modal-team { display:flex; align-items:center; gap:13px; }
+    .modal-team .team-emblem { width:51px; height:51px; }
+    .modal-team h2 { font-size:17px; }
+    .modal-team p { margin:4px 0 0; color:var(--muted); font-size:9px; }
+    .close-modal { border:1px solid var(--line); background:#171e2c; width:32px; height:32px; border-radius:50%; cursor:pointer; color:#b4bfd0; font-size:17px; }
+    .close-modal:hover { color:#fff; background:#252f41; }
+    .modal-body { padding:20px 22px 24px; }
+    .roster-summary { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:19px; color:#929eb2; font-size:9px; }
+    .roster-summary b { color:#e6edf8; }
+    .roster-groups { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .role-group { border:1px solid rgba(255,255,255,.075); background:#0d121c; border-radius:9px; padding:13px; }
+    .role-title { display:flex; align-items:center; justify-content:space-between; color:#a9c8fa; font-size:9px; font-weight:900; letter-spacing:.11em; text-transform:uppercase; margin-bottom:10px; }
+    .role-title small { color:#697890; font-size:8px; }
+    .player { padding:8px 0; border-top:1px solid rgba(255,255,255,.055); font-size:10px; font-weight:700; }
+    .player:first-of-type { border-top:0; }
+    .player .real-name { display:block; color:#718099; font-size:8px; font-weight:500; margin-top:2px; }
+    .coach-list { margin-top:16px; padding-top:13px; border-top:1px solid var(--line); color:#919db0; font-size:9px; }
+    .coach-list strong { color:#dce5f4; margin-right:8px; }
+    @media (max-width: 850px) {
+      .topbar { padding:0 20px; }
+      nav { gap:19px; }
+      .hero { padding-top:49px; }
+      .hero-inner { grid-template-columns:1.1fr .9fr; gap:18px; }
+      .hero-feature { padding:17px; }
+      .schedule-grid { grid-template-columns:repeat(2,1fr); }
+      .day-card:last-of-type { grid-column:span 2; }
+      .team-grid { grid-template-columns:repeat(2,1fr); }
+    }
+    @media (max-width: 620px) {
+      .topbar { height:59px; padding:0 14px; gap:10px; }
+      .brand { gap:8px; font-size:11px; }
+      .brand-mark { width:28px; height:28px; }
+      nav { gap:14px; }
+      nav a { font-size:9px; }
+      nav a:last-child { display:none; }
+      .topbar nav a.signup-link { display:flex; }
+      .signup-link { padding:0 8px; }
+      .season-tag { padding:7px 9px; font-size:8px; gap:6px; }
+      .wrap { width:calc(100% - 28px); }
+      .hero { padding:38px 0 26px; }
+      .hero-inner { grid-template-columns:1fr; gap:26px; }
+      .hero-feature { justify-self:stretch; width:100%; max-width:none; }
+      .hero::before { right:-18%; }
+      .hero::after { display:none; }
+      h1 { font-size:clamp(40px,12vw,61px); }
+      .hero-copy { font-size:12px; }
+      .hero-meta { margin-top:17px; }
+      .content { padding-top:20px; }
+      .stats-strip { grid-template-columns:repeat(2,1fr); margin-bottom:34px; }
+      .stat { padding:12px; }
+      .stat strong { font-size:14px; }
+      .section { margin-top:35px; }
+      .section-head { align-items:start; }
+      h2 { font-size:20px; }
+      .section-desc { max-width:260px; line-height:1.6; }
+      .schedule-grid { grid-template-columns:1fr; }
+      .day-card:last-of-type { grid-column:auto; }
+      .standings-layout { grid-template-columns:1fr; }
+      .leader-card { display:grid; grid-template-columns:1fr 1fr; gap:0 12px; }
+      .leader-card h3, .leader-intro { grid-column:1/-1; }
+      .leader-row:nth-of-type(2), .leader-row:nth-of-type(3) { border-top:1px solid rgba(255,255,255,.06); }
+      .team-grid { gap:8px; }
+      .team-card { min-height:116px; padding:12px; }
+      .team-card .team-emblem { width:35px; height:35px; flex-basis:35px; border-radius:9px; font-size:9px; }
+      .team-lockup { gap:8px; }
+      .team-name strong { font-size:9px; }
+      .bottom-cta { padding:17px; align-items:flex-start; flex-direction:column; }
+      .footer-inner { align-items:flex-start; flex-direction:column; }
+      .roster-groups { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width: 380px) {
+      nav { gap:9px; }
+      nav a { font-size:8px; }
+      .season-tag { font-size:0; }
+      .season-tag i { width:8px; height:8px; }
+      .team-grid { grid-template-columns:1fr; }
+      .team-card { min-height:96px; }
+      .team-name strong { font-size:11px; }
+      .roster-groups { grid-template-columns:1fr; }
+      .feature-foot { font-size:9px; }
+    }
+    /* Category views: one section at a time, without a long landing-page scroll. */
+    [hidden] { display:none !important; }
+    .topbar nav { gap:6px; }
+    .nav-tab { height:100%; padding:0 15px; position:relative; border:0; background:transparent; color:#aab2c2; font-size:11px; font-weight:800; cursor:pointer; }
+    .nav-tab:hover, .nav-tab.active { color:#fff; }
+    .nav-tab.active::after { content:""; position:absolute; height:2px; left:12px; right:12px; bottom:0; background:var(--blue); border-radius:2px 2px 0 0; }
+    .dashboard-heading { min-height:80px; display:flex; justify-content:space-between; align-items:center; gap:15px; border-bottom:1px solid var(--line); }
+    .dashboard-heading .section-kicker { margin:0 0 3px; font-size:8px; }
+    .dashboard-heading h1 { margin:0; font-size:25px; letter-spacing:-.05em; }
+    .dashboard-heading h1 span { color:var(--blue-bright); }
+    .dashboard-meta { display:flex; align-items:center; gap:17px; color:#99a5b8; font-size:9px; font-weight:700; }
+    .dashboard-meta span:first-child { display:flex; align-items:center; gap:6px; color:#b4e7ca; }
+    .dashboard-meta i { width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 9px rgba(99,230,161,.6); }
+    .content { padding:15px 0 22px; }
+    .stats-strip { margin:0 0 15px; grid-template-columns:repeat(4,1fr); }
+    .stat { padding:9px 14px; }
+    .stat strong { font-size:13px; }
+    .section { margin-top:0; }
+    .section.category-panel { display:none; }
+    .section.category-panel.active { display:block; }
+    .section-head { margin-bottom:12px; align-items:center; }
+    h2 { font-size:20px; }
+    .section-desc { margin-top:4px; font-size:10px; }
+    .next-match-strip { min-height:44px; margin:0 0 12px; padding:8px 12px; display:flex; align-items:center; gap:14px; border:1px solid rgba(117,169,255,.15); border-radius:8px; background:linear-gradient(100deg,rgba(31,52,83,.64),rgba(16,21,33,.85)); }
+    .next-label { display:flex; align-items:center; gap:6px; color:#a8c8ff; font-size:8px; font-weight:900; letter-spacing:.11em; white-space:nowrap; }
+    .next-label i { width:6px; height:6px; border-radius:50%; background:var(--blue); }
+    .next-match-strip > strong { font-size:12px; white-space:nowrap; }
+    .next-match-strip > strong small { color:#99a5b8; font-size:8px; margin-left:3px; }
+    .next-fixture { flex:1; color:#dfe7f5; font-size:9px; font-weight:900; text-align:center; }
+    .next-fixture b { color:#75829a; font-size:8px; margin:0 8px; }
+    .next-match-strip .countdown { min-width:52px; text-align:right; font-size:9px; }
+    .next-match-strip > a { color:#c2d7fa; font-size:8px; font-weight:800; white-space:nowrap; }
+    .schedule-toolbar { margin-bottom:9px; }
+    .filter-button { padding:6px 11px; font-size:9px; }
+    .schedule-grid { gap:9px; }
+    .day-head { padding:9px 11px 8px; }
+    .date-box { width:31px; height:32px; }
+    .day-info strong { font-size:10px; }
+    .stage-badge { font-size:7px; padding:4px 6px; }
+    .fixture-list { padding:0 10px 5px; }
+    .fixture { min-height:37px; gap:5px; }
+    .fixture-team { gap:5px; font-size:8px; }
+    .mini-mark { width:20px; height:20px; flex-basis:20px; font-size:6px; }
+    .fixture-score { font-size:8px; }
+    .fixture-time { padding-bottom:8px; font-size:7px; }
+    .standings-layout { grid-template-columns:minmax(0,1.6fr) minmax(230px,.7fr); gap:11px; }
+    .table-top { padding:11px 14px; }
+    th { padding:8px 11px; }
+    td { padding:8px 11px; }
+    .leader-card { padding:13px; }
+    .leader-row { padding:8px 0; }
+    .teams-layout { display:grid; grid-template-columns:minmax(270px,.82fr) minmax(0,1.4fr); gap:11px; align-items:stretch; }
+    .team-picker { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; align-content:start; }
+    .team-card { min-width:0; min-height:70px; padding:9px; border-radius:8px; }
+    .team-card.selected { border-color:rgba(137,181,255,.6); background:linear-gradient(145deg,#1b2b45,#111a29); box-shadow:inset 0 0 0 1px rgba(137,181,255,.1); }
+    .team-card-head { gap:4px; }
+    .team-lockup { gap:7px; }
+    .team-card .team-emblem { width:29px; height:29px; flex-basis:29px; border-radius:8px; font-size:7px; }
+    .team-name strong { font-size:8px; line-height:1.25; }
+    .team-name small { font-size:7px; margin-top:2px; }
+    .team-arrow { font-size:11px; }
+    .team-card-foot { margin-top:7px; padding-top:6px; font-size:6px; }
+    .team-card-foot b, .roster-count { font-size:7px; }
+    .roster-panel { min-width:0; padding:15px; border:1px solid var(--line); border-radius:10px; background:var(--surface); }
+    .roster-panel-head { display:flex; justify-content:space-between; align-items:center; gap:12px; padding-bottom:12px; margin-bottom:12px; border-bottom:1px solid var(--line); }
+    .roster-panel-title { display:flex; align-items:center; gap:10px; min-width:0; }
+    .roster-panel-title .team-emblem { width:40px; height:40px; border-radius:10px; font-size:9px; flex:0 0 40px; }
+    .roster-panel-title h3 { margin:0; font-size:14px; }
+    .roster-panel-title p { margin:3px 0 0; color:var(--muted); font-size:8px; }
+    .roster-record { text-align:right; color:#91a0b7; font-size:8px; white-space:nowrap; }
+    .roster-record strong { display:block; color:#e8eef8; font-size:12px; }
+    .roster-groups { gap:7px; }
+    .role-group { padding:10px; }
+    .role-title { margin-bottom:6px; font-size:8px; }
+    .player { padding:6px 0; font-size:9px; }
+    .coach-list { margin-top:11px; padding-top:10px; }
+    .roster-source { margin:10px 0 0; color:#68768d; font-size:7px; }
+    .footer-inner { font-size:8px; }
+    footer { padding:12px 0 16px; }
+    @media (max-width:850px) {
+      .teams-layout { grid-template-columns:minmax(230px,.9fr) minmax(0,1.2fr); }
+      .team-picker { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .team-card { min-height:68px; }
+    }
+    @media (max-width:620px) {
+      .topbar nav { gap:0; }
+      .nav-tab { padding:0 8px; font-size:9px; }
+      .nav-tab.active::after { left:6px; right:6px; }
+      .dashboard-heading { min-height:70px; align-items:flex-start; justify-content:center; flex-direction:column; gap:5px; padding:10px 0; }
+      .dashboard-heading h1 { font-size:21px; }
+      .dashboard-meta { gap:10px; font-size:7px; }
+      .content { padding-top:10px; }
+      .stats-strip { margin-bottom:12px; }
+      .stat { padding:8px; }
+      .stat span { font-size:8px; }
+      .stat strong { font-size:10px; }
+      .stat strong em { font-size:7px; }
+      .section-head { margin-bottom:10px; }
+      h2 { font-size:18px; }
+      .section-desc { max-width:270px; font-size:8px; }
+      .next-match-strip { gap:8px; padding:8px; flex-wrap:wrap; }
+      .next-label { font-size:7px; }
+      .next-fixture { order:4; flex-basis:100%; text-align:left; padding-left:3px; }
+      .next-match-strip .countdown { margin-left:auto; }
+      .schedule-grid { grid-template-columns:1fr; }
+      .day-card:last-of-type { grid-column:auto; }
+      .fixture { min-height:39px; }
+      .standings-layout { grid-template-columns:1fr; }
+      .leader-card { display:grid; grid-template-columns:1fr 1fr; gap:0 12px; }
+      .leader-card h3, .leader-intro { grid-column:1/-1; }
+      .teams-layout { grid-template-columns:1fr; }
+      .team-picker { grid-template-columns:repeat(3,minmax(0,1fr)); }
+      .team-card { min-height:65px; padding:7px; }
+      .team-card-foot { font-size:6px; }
+      .roster-panel { padding:12px; }
+      .roster-groups { grid-template-columns:repeat(3,minmax(0,1fr)); }
+      .role-group { padding:8px; }
+      .role-title { font-size:7px; }
+      .player { font-size:8px; }
+      .player .real-name { font-size:7px; }
+      .footer-inner { align-items:flex-start; flex-direction:column; }
+    }
+    @media (max-width:380px) {
+      .team-picker { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .roster-groups { grid-template-columns:1fr; }
+      .next-fixture { font-size:8px; }
+      .dashboard-meta { gap:7px; }
+    }
+  </style>
+  <style>
+    :root{color-scheme:light;--bg:#f3f1eb;--surface:#fff;--surface-2:#f5f5f2;--line:#e5e4e0;--text:#111318;--muted:#777a80;--blue:#20242d;--blue-bright:#16191e;--green:#008b58}
+    body{color:var(--text);background-color:var(--bg);background-image:repeating-linear-gradient(135deg,rgba(20,24,30,.018) 0,rgba(20,24,30,.018) 1px,transparent 1px,transparent 11px);font-family:Arial,"Noto Sans KR",Pretendard,sans-serif}
+    button:focus-visible{outline:2px solid #20242d;outline-offset:2px}
+    .wrap{width:min(1700px,calc(100% - 12px));margin:0 auto}
+    .topbar{padding-left:max(18px,calc((100% - 1700px)/2));padding-right:max(18px,calc((100% - 1700px)/2))}
+    .topbar{background:rgba(255,255,255,.94);border-bottom:1px solid #e4e3df;box-shadow:0 3px 12px rgba(20,24,30,.045);backdrop-filter:blur(14px)}
+    .brand{color:#111318}.brand-mark{border-radius:50%;background:#111318;color:white;box-shadow:none}.brand small{color:#73767c}
+    .season-tag{background:#f6f6f4;border-color:#dfdfdc;color:#35383e}.season-tag i{background:#1aa16e;box-shadow:none}
+    .nav-tab{color:#60636a}.nav-tab:hover,.nav-tab.active{color:#101217}.nav-tab.active::after{background:#111318}
+    .dashboard-heading{border-color:#deddd8}.dashboard-heading .section-kicker{color:#72767d}.dashboard-heading h1{color:#15171c}.dashboard-heading h1 span{color:#6b7078}
+    .dashboard-meta{color:#777a80}.dashboard-meta span:first-child{color:#198257}.dashboard-meta i{background:#1aa16e;box-shadow:none}
+    .content{padding-top:12px}.stats-strip{display:none}
+    .section-head{margin-bottom:13px}.section-kicker{color:#72767d}.section-desc{color:#7a7d82}.text-link{color:#363a42}
+    .filter-button{background:#fff;border-color:#dededb;color:#65686e}.filter-button.active{background:#16191e;border-color:#16191e;color:#fff}
+    .day-card,.table-card,.leader-card{background:#fff;border:1px solid #e4e3df;border-radius:12px;box-shadow:0 3px 12px rgba(18,21,26,.035)}
+    .day-card:hover{border-color:#a8a9aa;box-shadow:0 8px 22px rgba(18,21,26,.07)}
+    .day-head,.table-top{border-color:#ecebe8}.day-head{background:#fff}.date-box{background:#f0f0ed;color:#15171b}.date-box small,.day-info small{color:#777b82}.day-info strong{color:#17191d}.stage-badge{background:#f2f2ef;border-color:#e6e5e1;color:#62656b}
+    .fixture{color:#16191e}.fixture:hover{background:#f5f5f2}.fixture-list .fixture{border-color:#ededea}.fixture-team{color:#24272d}.mini-mark{background:#f1f1ee;border-color:#e4e3df;color:var(--team-color)}.fixture-score.upcoming{color:#8b8d92}.fixture-time{color:#777b82}
+    .table-top strong{color:#181a1f}.as-of{color:#777a80}th{background:#f8f8f6;color:#7c7f84}td{color:#30333a;border-color:#eeedea}.rank{color:#888b8f}.rank.top{color:#16191e}.stand-team{color:#1a1d22}.record{color:#777a80}.qualify{color:#16804f}.leader-card h3{color:#16191e}.leader-intro{color:#777a80}.leader-row{border-color:#eeedea}.leader-info strong{color:#1d2025}.leader-info small{color:#83858a}.leader-stat{color:#2b3038}.leader-number{color:#929499}
+    .team-picker-heading{display:flex;justify-content:space-between;align-items:center;margin:2px 0 10px;color:#1b1e23;font-size:12px;font-weight:800}.team-picker-heading span:last-child{color:#777a80;font-size:9px;font-weight:500}
+    .team-picker{display:grid;grid-template-columns:repeat(9,minmax(135px,1fr));gap:12px;overflow-x:auto;padding:2px 2px 9px;margin:0 0 15px;scrollbar-color:#bfc0bd transparent;scrollbar-width:thin}
+    .team-card{height:135px;min-height:135px;padding:13px 9px 11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#fff;border:1px solid #e4e3df;border-top:5px solid var(--team-color);border-radius:16px;text-align:center;box-shadow:0 3px 11px rgba(19,22,26,.035);transition:transform .16s,border-color .16s,box-shadow .16s}
+    .team-card:hover{transform:translateY(-2px);background:#fff;border-color:#b9b9b5;border-top-color:var(--team-color);box-shadow:0 8px 20px rgba(15,18,22,.09)}
+    .team-card.selected{border:2px solid #14161a;border-top:5px solid var(--team-color);padding:12px 8px 10px;box-shadow:0 5px 14px rgba(15,18,22,.08)}
+    .team-logo-wordmark{height:69px;width:100%;display:grid;place-items:center;color:#111318;font-size:27px;font-weight:1000;letter-spacing:-.09em;line-height:1}
+    .team-card[data-team="zeta"] .team-logo-wordmark{font-style:italic;letter-spacing:-.16em;font-size:25px}
+    .team-card[data-team="cr"] .team-logo-wordmark{font-family:Georgia,serif;font-weight:1000;text-shadow:1px 1px #bbb}
+    .team-card[data-team="t1"] .team-logo-wordmark{color:#e4002b;font-style:italic;font-size:34px}
+    .team-card[data-team="cheese"] .team-logo-wordmark{font-size:15px;letter-spacing:-.04em}
+    .team-card[data-team="falcons"] .team-logo-wordmark{color:#00a66a;font-size:42px}
+    .team-card[data-team="seiji"] .team-logo-wordmark{font-family:Georgia,serif;font-style:italic}
+    .team-card[data-team="zanside"] .team-logo-wordmark{font-style:italic;transform:skew(-12deg)}
+    .team-card[data-team="o2"] .team-logo-wordmark{font-size:31px;font-style:italic}
+    .team-card[data-team="poker"]{opacity:.62}
+    .team-card strong{min-height:29px;display:flex;align-items:center;justify-content:center;color:#16181c;font-size:11px;line-height:1.25;font-weight:800}
+    .teams-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;min-height:410px;border:1px solid #e2e1dc;border-radius:17px;overflow:hidden;background:#fff;box-shadow:0 4px 15px rgba(18,21,26,.045)}
+    .team-banner{--team-color:#00a66a;min-height:410px;position:relative;overflow:hidden;color:white;background:radial-gradient(ellipse at 28% 28%,color-mix(in srgb,var(--team-color) 52%,transparent),transparent 42%),linear-gradient(145deg,#172d27,#071812 80%);isolation:isolate}
+    .team-banner::before{content:"";position:absolute;inset:-12%;z-index:-1;opacity:.44;background:repeating-linear-gradient(132deg,transparent 0 36px,rgba(255,255,255,.09) 37px 38px,transparent 39px 72px);transform:scale(1.05)}
+    .team-banner::after{content:"";position:absolute;z-index:-1;right:-80px;top:-80px;width:360px;height:360px;border:1px solid rgba(255,255,255,.16);border-radius:50%;box-shadow:0 0 0 32px rgba(255,255,255,.035),0 0 0 70px rgba(255,255,255,.025)}
+    .banner-shape{position:absolute;z-index:-1;inset:0;background:linear-gradient(0deg,rgba(2,8,6,.95),rgba(4,16,11,.3) 72%,rgba(3,11,8,.08))}
+    .banner-content{min-height:410px;display:flex;flex-direction:column;align-items:flex-start;padding:26px 27px 20px}
+    .banner-label{color:rgba(255,255,255,.68);font-size:9px;font-weight:800;letter-spacing:.2em}
+    .banner-mark{margin-top:33px;color:#fff;font-size:clamp(45px,6vw,76px);font-weight:1000;line-height:.95;letter-spacing:-.11em;text-shadow:0 4px 24px rgba(0,0,0,.24)}
+    .banner-title{margin-top:8px;font-size:clamp(17px,2vw,25px);font-weight:900;letter-spacing:-.04em}
+    .banner-meta{display:flex;align-items:center;gap:8px;margin-top:6px;color:rgba(255,255,255,.75);font-size:9px}
+    .banner-meta b{color:rgba(255,255,255,.4)}
+    .next-match-card{width:100%;margin-top:auto;padding:13px 14px;border:1px solid rgba(255,255,255,.25);border-radius:11px;text-align:left;color:#fff;background:rgba(8,14,13,.62);backdrop-filter:blur(12px);cursor:pointer;transition:background .16s,border-color .16s}
+    .next-match-card:hover{background:rgba(8,14,13,.8);border-color:rgba(255,255,255,.56)}
+    .next-card-head{display:flex;justify-content:space-between;gap:8px;color:rgba(255,255,255,.67);font-size:8px;font-weight:700}
+    .next-card-head span:first-child{text-transform:uppercase;letter-spacing:.12em}
+    .next-card-teams{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:11px 0;font-size:10px;font-weight:900}
+    .next-card-teams span{max-width:43%;line-height:1.3}.next-card-teams b{color:color-mix(in srgb,var(--team-color) 70%,white);font-size:11px;margin-right:4px}.next-card-teams i{color:rgba(255,255,255,.48);font-size:8px;font-style:normal}
+    .next-card-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.16);padding-top:8px;color:#d8e8df;font-size:8px;font-weight:700}.next-card-foot strong{font-size:14px}
+    .next-match-card.no-match{cursor:default}.next-match-card.no-match>strong{display:block;margin-top:16px;font-size:13px}
+    .roster-panel{min-height:410px;padding:22px 23px;background:#fff;border:0;border-radius:0;box-shadow:none;overflow:auto}
+    .roster-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.roster-kicker{font-size:8px;color:#85868a;font-weight:800;letter-spacing:.17em}.roster-panel-head h2{margin:3px 0 0;font-size:16px;letter-spacing:-.02em}.roster-count{color:#717379;font-size:10px;white-space:nowrap}.roster-count b{color:#111318}
+    .player-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+    .player-card{min-width:0;min-height:72px;display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:11px;background:#f5f5f2;border:1px solid #f0f0ed}
+    .player-avatar{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border-radius:50%;color:#fff;background:radial-gradient(circle at 35% 28%,color-mix(in srgb,var(--team-color) 55%,#fff),var(--team-color) 50%,#292d34 100%);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.16);font-size:12px;font-weight:900;letter-spacing:-.04em}
+    .player-card-info{min-width:0;flex:1}.player-card-info strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#14161a;font-size:11px;font-weight:900}.player-card-info small{display:block;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#797b80;font-size:7px}
+    .player-role{width:27px;flex:0 0 27px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#66686e}.player-role i{font-style:normal;font-size:15px;line-height:1}.player-role small{font-size:6px;font-weight:800;letter-spacing:.04em}.player-role.tank i{color:#777980}.player-role.dps i{color:#76777c}.player-role.support i{color:#777980}
+    .staff-details{margin-top:11px;padding:9px 11px;border:1px solid #e8e8e5;border-radius:9px;background:#fff}.staff-details summary{display:flex;justify-content:space-between;list-style:none;cursor:pointer;color:#4c4f55;font-size:9px;font-weight:800}.staff-details summary::-webkit-details-marker{display:none}.staff-details[open] summary b{transform:rotate(180deg)}.staff-details>div{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.staff-details>div span{padding:5px 8px;border-radius:999px;background:#f2f2ef;color:#55585e;font-size:8px}
+    .roster-source{margin:8px 0 0;color:#96979a;font-size:7px}
+    .day-card,.table-card,.leader-card{color:#181a1e}.empty-state{border-color:#d8d8d4;color:#777a80}
+    .fixture{width:100%;border:0;background:transparent;text-align:left;font:inherit;cursor:default}.clickable-fixture{cursor:pointer}.clickable-fixture:hover{background:#f1f2ef}
+    .footer-inner,.footer-inner a{color:#777a80}.footer-inner a:hover{color:#22252b}
+    #matchDialog{width:min(530px,calc(100% - 26px));max-height:calc(100% - 26px);padding:0;border:1px solid #e1e0dc;border-radius:16px;color:#15171b;background:#fff;box-shadow:0 24px 80px rgba(20,22,25,.25)}
+    #matchDialog::backdrop{background:rgba(20,22,26,.42);backdrop-filter:blur(3px)}
+    .match-dialog-head{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid #ecebe8}.match-dialog-head .section-kicker{font-size:8px}.match-dialog-head h2{margin:3px 0 0;font-size:17px}.close-modal{border:1px solid #dededb;background:#fff;color:#333;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px}.match-dialog-body{padding:19px 20px 21px}
+    .analysis-fixture{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;text-align:center}.analysis-team{display:flex;flex-direction:column;align-items:center;gap:5px}.analysis-mark{width:52px;height:52px;display:grid;place-items:center;border-radius:15px;background:color-mix(in srgb,var(--team-color) 12%,white);color:var(--team-color);font-size:14px;font-weight:1000}.analysis-team strong{font-size:10px}.analysis-team small{color:#797b80;font-size:8px}.analysis-team>b{font-size:23px;letter-spacing:-.05em}.analysis-vs{color:#a2a3a5;font-size:9px;font-weight:900}
+    .odds-bar{height:8px;display:flex;gap:3px;overflow:hidden;margin:13px 0 7px;border-radius:999px}.odds-bar span{background:var(--bar-color);border-radius:999px}.analysis-label-row{display:flex;justify-content:space-between;color:#55585e;font-size:9px;font-weight:800}.analysis-label-row span:last-child{color:#85868a;font-weight:600}
+    .h2h-card{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:17px}.h2h-card>div{padding:11px;border:1px solid #e8e8e5;border-radius:9px;background:#f7f7f5}.h2h-card small{display:block;color:#85868a;font-size:8px}.h2h-card strong{display:block;margin-top:5px;color:#25282e;font-size:10px}
+    .analysis-explain{margin:14px 0 0;padding:12px;border-left:3px solid #272a30;border-radius:0 8px 8px 0;background:#f5f5f2;color:#595b60;font-size:9px;line-height:1.7}.analysis-explain b{color:#17191d}.analysis-note{margin:9px 0 0;color:#888a8e;font-size:8px;line-height:1.6}
+    @media(max-width:1250px){.team-picker{grid-template-columns:repeat(9,minmax(124px,1fr));gap:9px}.player-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.teams-layout{grid-template-columns:.9fr 1.1fr}}
+    @media(max-width:850px){.team-picker{grid-template-columns:repeat(9,minmax(116px,1fr))}.teams-layout{grid-template-columns:1fr}.team-banner,.banner-content{min-height:300px}.banner-mark{margin-top:18px}.roster-panel{min-height:0}.player-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.standings-layout{grid-template-columns:minmax(0,1.4fr) minmax(210px,.8fr)}}
+    @media(max-width:620px){.wrap{width:calc(100% - 22px)}.topbar{padding:0 11px}.nav-tab{font-size:9px;padding:0 7px}.dashboard-heading{min-height:60px}.dashboard-meta{font-size:7px;gap:8px}.team-picker-heading span:last-child{font-size:7px}.team-picker{grid-template-columns:repeat(9,125px);gap:8px}.team-card{height:115px;min-height:115px}.team-logo-wordmark{height:57px}.teams-layout{border-radius:12px}.team-banner,.banner-content{min-height:280px}.banner-content{padding:20px}.banner-mark{font-size:52px}.roster-panel{padding:15px 12px}.player-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.player-card{min-height:62px;padding:6px;gap:6px}.player-avatar{width:39px;height:39px;flex-basis:39px}.player-role{width:21px;flex-basis:21px}.player-card-info strong{font-size:9px}.player-card-info small{font-size:6px}.schedule-grid{grid-template-columns:1fr}.standings-layout{grid-template-columns:1fr}.leader-card{display:block}.footer-inner{font-size:7px}.h2h-card{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="OWCS Korea 홈">
+      <span class="brand-mark">OW</span><span>OWCS <small>KOREA</small></span>
+    </a>
+    <nav aria-label="주요 메뉴">
+      <button class="nav-tab" data-page="schedule" aria-pressed="false">일정</button>
+      <button class="nav-tab" data-page="standings" aria-pressed="false">순위표</button>
+      <button class="nav-tab active" data-page="teams" aria-pressed="true">팀 & 로스터</button>
+      <a class="signup-link" href="rogin.html">회원가입</a>
+    </nav>
+    <div class="season-tag"><i></i> 2026 · STAGE 3</div>
+  </header>
+
+  <main class="wrap" id="top">
+    <div class="dashboard-heading">
+      <div><div class="section-kicker">OVERWATCH CHAMPIONS SERIES · KOREA</div><h1>2026 <span>STAGE 3</span></h1></div>
+      <div class="dashboard-meta"><span><i></i> 진행 중</span><span>10.02 — 11.08</span><span>WDG STUDIO HONGDAE</span></div>
+    </div>
+    <div class="content">
+      
+
+      <section class="section category-panel" id="schedule" aria-label="경기 일정" hidden>
+        <div class="section-head">
+          <div><div class="section-kicker">MATCH CENTER</div><h2>경기 일정</h2><p class="section-desc">Stage 3 남은 일정과 최근 결과를 확인하세요. 개별 경기 시작 시각은 현장 세션 기준입니다.</p></div>
+          <a class="text-link" href="https://owtv.gg/tournaments/korea-stage-3-owcs-2026" target="_blank" rel="noreferrer">전체 경기 보기 <span>↗</span></a>
+        </div>
+        <div class="next-match-strip"><span class="next-label"><i></i> NEXT MATCH DAY</span><strong>10.30 <small>FRI · 17:00</small></strong><span class="next-fixture">TEAM FALCONS <b>VS</b> SEIJI ESPORTS</span><span class="countdown" id="countdown">--:--</span><a href="https://www.ticketlink.co.kr/sports/1262/631" target="_blank" rel="noreferrer">티켓 ↗</a></div>
+        <div class="schedule-toolbar" role="group" aria-label="일정 필터">
+          <button class="filter-button active" data-filter="upcoming">다가오는 경기</button>
+          <button class="filter-button" data-filter="all">전체 일정</button>
+          <button class="filter-button" data-filter="results">최근 결과</button>
+        </div>
+        <div class="schedule-grid" id="scheduleGrid"></div>
+        <div class="empty-state" id="scheduleEmpty">해당하는 일정이 없습니다.</div>
+      </section>
+
+      <section class="section category-panel" id="standings" aria-label="순위표" hidden>
+        <div class="section-head">
+          <div><div class="section-kicker">LEAGUE TABLE</div><h2>순위표</h2><p class="section-desc">정규 라운드와 시딩 경기 결과를 반영한 Stage 3 현재 기록입니다.</p></div>
+          <a class="text-link" href="https://owtv.gg/tournaments/korea-stage-3-owcs-2026" target="_blank" rel="noreferrer">대회 페이지 <span>↗</span></a>
+        </div>
+        <div class="standings-layout">
+          <div class="table-card">
+            <div class="table-top"><strong>2026 KOREA STAGE 3</strong><span class="as-of">기록 기준 · 10월 25일</span></div>
+            <div class="table-scroll"><table>
+              <thead><tr><th>#</th><th>팀</th><th>승</th><th>패</th><th>맵 득실</th><th>진출</th></tr></thead>
+              <tbody id="standingsBody"></tbody>
+            </table></div>
+          </div>
+          <aside class="leader-card">
+            <h3>이번 스테이지 주목 팀</h3><div class="leader-intro">현재 순위표 상위권</div>
+            <div id="leaders"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section category-panel active" id="teams" aria-label="팀과 로스터">
+        <div class="team-picker-heading"><span>2026 OWCS KOREA · STAGE 3</span><span>팀을 선택해 로스터와 다음 경기를 확인하세요</span></div>
+        <div class="team-picker" id="teamGrid" aria-label="팀 선택"></div>
+        <div class="teams-layout">
+          <section class="team-banner" id="teamBanner" aria-label="선택한 팀과 다음 경기"></section>
+          <article class="roster-panel" id="rosterPanel" aria-live="polite"></article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer><div class="wrap footer-inner">
+    <span>OWCS KOREA FAN PAGE · 2026 STAGE 3 · 일부 일정 및 로스터 정보는 변경될 수 있습니다.</span>
+    <div class="footer-links"><a href="https://esports.overwatch.com/en-us/news/owcs-2026-stage-3-viewers-guide" target="_blank" rel="noreferrer">OW Esports</a><a href="https://owtv.gg/news/the-road-from-korea-to-guangzhou-starts-here" target="_blank" rel="noreferrer">Stage 3 로스터 안내</a><a href="https://owtv.gg/tournaments/korea-stage-3-owcs-2026" target="_blank" rel="noreferrer">대회 데이터</a></div>
+  </div></footer>
+
+  <dialog id="matchDialog" aria-labelledby="matchDialogTitle">
+    <div class="match-dialog-head"><div><span class="section-kicker">MATCHUP REPORT</span><h2 id="matchDialogTitle">상대 전적 & 승률 분석</h2></div><button class="close-modal" id="closeMatchDialog" aria-label="닫기">×</button></div>
+    <div class="match-dialog-body" id="matchDialogBody"></div>
+  </dialog>
+
+  <script>
+    (() => {
+      const teams = [
+        { id:'zeta', name:'ZETA DIVISION', short:'ZETA', mark:'ZETA', color:'#a8c5ff', record:'8–0', maps:'24–4', place:1, status:'ASIA 시드 경쟁', players:{Tank:[['Bernar','Shin Se-won'],['Mealgaru','Lee Jeong-hwan']],DPS:[['Proper','Kim Dong-hyun'],['knife','Lee Seon-woo']],Support:[['shu','Kim Jin-seo'],['Viol2t','Park Min-ki']]}, coaches:['Crusty','Twilight'] },
+        { id:'cr', name:'CRAZY RACCOON', short:'CR', mark:'CR', color:'#ff7c8d', record:'7–1', maps:'22–6', place:2, status:'ASIA 시드 경쟁', players:{Tank:[['JunBin','Park Jun-bin'],['MAX','Choi Su-min']],DPS:[['STALK3R','Jeong Hak-yong'],['HeeSang','Chae Hee-sang'],['LIP','Lee Jae-won']],Support:[['CH0R0NG','Sung Yoo-min'],['vigilante','Kim Joon']]}, coaches:['Kong','Izayaki'] },
+        { id:'t1', name:'T1', short:'T1', mark:'T1', color:'#ff5c63', record:'6–2', maps:'20–7', place:3, status:'ASIA 시드 경쟁', players:{Tank:[['DONGHAK','Kim Min-sung'],['Jasm1ne','Jeong Jong-min']],DPS:[['Proud','Hong Suk-jin'],['ZEST','Kim Hyun-woo']],Support:[['skewed','Kim Min-seok'],['Bliss','Kim So-myung']]}, coaches:['RUSH','Fleta','GgulTaek'] },
+        { id:'cheese', name:'CHEESEBURGER', short:'CB', mark:'CB', color:'#f6c862', record:'5–3', maps:'18–10', place:4, status:'ASIA 시드 경쟁', players:{Tank:[['Belosrea','Hwang Gyu-tae']],DPS:[['K4ne','Choi Ju-hyung'],['Profit','Park Joon-yeong'],['AZENT','Jang Hyeon-ik']],Support:[['TenTen','Heo Ye-jun'],['Trest','선수 정보 미공개']]}, coaches:['Krillin'] },
+        { id:'falcons', name:'TEAM FALCONS', short:'FLC', mark:'FLC', color:'#73adff', record:'4–4', maps:'14–12', place:5, status:'LCQ', players:{Tank:[['Hanbin','Choi Han-been'],['SOMEONE','Ham Jeong-wan']],DPS:[['Checkmate','Baek Seung-hun'],['SP1NT','An Woo-jin'],['MER1T','Choi Tae-min']],Support:[['Fielder','Kwon Joon'],['ChiYo','Han Hyeon-seok']]}, coaches:['NineK','SP9RK1E','Junkbuck'] },
+        { id:'seiji', name:'SEIJI ESPORTS', short:'SEJ', mark:'SEJ', color:'#b195ff', record:'2–6', maps:'7–21', place:6, status:'LCQ', players:{Tank:[['DOX','Kim Jun-seo']],DPS:[['D4RT','Go Min-hyuk'],['M1nut2','Seo Min-seo']],Support:[['OFF','Lee Jae-in'],['Lavender','Lee Seung-je']]}, coaches:['Da1Da1Sm00th','SanGuiNar'] },
+        { id:'zanside', name:'RØDE ZANSIDE GAMING', short:'ZSG', mark:'ZSG', color:'#f2a873', record:'2–6', maps:'8–22', place:7, status:'LCQ', players:{Tank:[['HEISER','Cho Yu-hyun'],['HEESUNG','Lee Hee-sung']],DPS:[['Becky','Kim Il-ha'],['Kilo','Jung Jin-woo'],['Taejong','Yoo Tae-jong']],Support:[['iRONY','Kim Baek-kang'],['OPENER','An Gi-beom']]}, coaches:['KariV','Ado','Mircalla'] },
+        { id:'o2', name:'O2 BLAST', short:'O2', mark:'O2', color:'#65d9c1', record:'1–7', maps:'7–22', place:8, status:'LCQ', players:{Tank:[['Fate','Koo Pan-seung'],['homerunball','Kim Jae-woo']],DPS:[['A1IEN','Han Yu-bin'],['Perr','Kim Dam-I'],['WuTian','Lim Jae-won']],Support:[['Faith','Kim Hong-gyu'],['Gamjung','Lee Jeong-min']]}, coaches:['O2Boss','Chilhwa','Myunb0ng','Cane'] },
+        { id:'poker', name:'POKER FACE', short:'PF', mark:'PF', color:'#f18bcb', record:'1–7', maps:'7–23', place:9, status:'탈락', players:{Tank:[['SoLA','Shin Eon-woo'],['SWOO','Yoo Ju-ho']],DPS:[['F1nally','Park Min-jae'],['SORI','Lee Jin-uk']],Support:[['Dumbbell','Hwang Tae-san'],['Caffeine','Kwon Ye-jun'],['Soae','Lee Chae-woo']]}, coaches:['SEON','Mandu'] }
+      ];
+      const fixtures = [
+        {date:'10.30',weekday:'금요일',time:'17:00 KST',stage:'LCQ DAY 1 · SEEDING',kind:'upcoming',matches:[
+          {id:'falcons-seiji',a:'falcons',b:'seiji',score:'VS',h2h:{a:1,b:0,last:'10.16 · FLC 3 : 0 SEJ'}},
+          {id:'zeta-cheese',a:'zeta',b:'cheese',score:'VS',h2h:{a:1,b:0,last:'10.24 · CB 2 : 3 ZETA'}},
+          {id:'cr-t1',a:'cr',b:'t1',score:'VS',h2h:{a:1,b:0,last:'10.10 · CR 3 : 1 T1'}}
+        ]},
+        {date:'10.31',weekday:'토요일',time:'15:00 KST',stage:'LCQ DAY 2 · SEEDING',kind:'upcoming',matches:[
+          {id:'zanside-o2',a:'zanside',b:'o2',score:'VS',h2h:{a:1,b:0,last:'10.11 · O2 2 : 3 ZSG'}},
+          {id:'zeta-t1',a:'zeta',b:'t1',score:'VS',h2h:{a:1,b:0,last:'10.03 · T1 1 : 3 ZETA'}},
+          {id:'cr-cheese',a:'cr',b:'cheese',score:'VS',h2h:{a:1,b:0,last:'10.11 · CB 1 : 3 CR'}}
+        ]},
+        {date:'11.01',weekday:'일요일',time:'15:00 KST',stage:'LCQ DAY 3 · SEEDING',kind:'upcoming',matches:[{id:'lcq-tbd',a:'tbd',b:'tbd',score:'TBD',h2h:{a:0,b:0,last:'아직 맞대결 없음'}}]},
+        {date:'11.06',weekday:'금요일',time:'17:00 KST',stage:'PLAYOFFS · DAY 1',kind:'upcoming',matches:[{id:'playoff-a',a:'tbd',b:'tbd',score:'TBD',h2h:{a:0,b:0,last:'대진 확정 후 업데이트'}}]},
+        {date:'11.07',weekday:'토요일',time:'15:00 KST',stage:'PLAYOFFS · DAY 2',kind:'upcoming',matches:[{id:'playoff-b',a:'tbd',b:'tbd',score:'TBD',h2h:{a:0,b:0,last:'대진 확정 후 업데이트'}}]},
+        {date:'11.08',weekday:'일요일',time:'15:00 KST',stage:'PLAYOFFS · DAY 3',kind:'upcoming',matches:[{id:'playoff-c',a:'tbd',b:'tbd',score:'TBD',h2h:{a:0,b:0,last:'대진 확정 후 업데이트'}}]},
+        {date:'10.25',weekday:'일요일',time:'최근 경기',stage:'최근 결과',kind:'results',matches:[
+          {id:'result-pf-zsg',a:'poker',b:'zanside',score:'2 : 3'},
+          {id:'result-o2-t1',a:'o2',b:'t1',score:'0 : 3'},
+          {id:'result-zeta-cr',a:'zeta',b:'cr',score:'3 : 1'}
+        ]}
+      ];
+      const getTeam = id => teams.find(team => team.id === id);
+      const mark = (team, cls='mini-mark') => team ? `<span class="${cls}" style="--team-color:${team.color}">${team.mark}</span>` : `<span class="${cls}" style="--team-color:#7d899b">TBD</span>`;
+      const fixtureCard = item => `<article class="day-card" data-kind="${item.kind}">
+        <div class="day-head"><div class="day-date"><span class="date-box"><b>${item.date.split('.')[1]}</b><small>${item.date.split('.')[0]==='10'?'OCT':'NOV'}</small></span><span class="day-info"><strong>${item.weekday}</strong><small>${item.time}</small></span></div><span class="stage-badge">${item.stage}</span></div>
+        <div class="fixture-list">${item.matches.map(match=>{
+          const ta=getTeam(match.a),tb=getTeam(match.b);
+          const inner=`<span class="fixture-team">${mark(ta)}<span class="name">${ta?ta.name:'대진 미정'}</span></span><span class="fixture-score ${item.kind==='upcoming'?'upcoming':''}">${match.score}</span><span class="fixture-team away"><span class="name">${tb?tb.name:'대진 미정'}</span>${mark(tb)}</span>`;
+          return item.kind==='upcoming'&&ta&&tb?`<button type="button" class="fixture clickable-fixture" data-match-id="${match.id}" aria-label="${ta.name} 대 ${tb.name} 경기 분석 보기">${inner}</button>`:`<div class="fixture">${inner}</div>`;
+        }).join('')}</div><div class="fixture-time">${item.kind==='results'?'FINAL · 경기 결과':`세션 시작 ${item.time} · 개별 경기 시각 추후 공지`}</div>
+      </article>`;
+      const upcomingMatches=fixtures.filter(day=>day.kind==='upcoming').flatMap(day=>day.matches.filter(match=>match.a!=='tbd'&&match.b!=='tbd').map(match=>({...match,date:day.date,weekday:day.weekday,time:day.time,stage:day.stage})));
+      const matchesById=new Map(upcomingMatches.map(match=>[match.id,match]));
+      const standings = teams.slice().sort((a,b)=>a.place-b.place);
+      document.getElementById('scheduleGrid').innerHTML = fixtures.map(fixtureCard).join('');
+      document.querySelectorAll('.day-card[data-kind="results"]').forEach(card=>card.style.display='none');
+      document.getElementById('standingsBody').innerHTML = standings.map(team=>{
+        const [wins,losses]=team.record.split('–').map(Number);
+        return `<tr data-team="${team.id}" tabindex="0" aria-label="${team.name} 로스터 보기"><td class="rank ${team.place<=4?'top':''}">${String(team.place).padStart(2,'0')}</td><td><span class="stand-team">${mark(team)}<span>${team.name}</span></span></td><td>${wins}</td><td>${losses}</td><td class="record">${team.maps}</td><td class="qualify">${team.place<=4?'ASIA':team.place===9?'OUT':'LCQ'}</td></tr>`;
+      }).join('');
+      document.getElementById('leaders').innerHTML = standings.slice(0,3).map((team,index)=>`<div class="leader-row"><span class="leader-number">0${index+1}</span>${mark(team)}<span class="leader-info"><strong>${team.name}</strong><small>${team.record} MATCH RECORD</small></span><span class="leader-stat">${team.maps}</span></div>`).join('');
+      const teamGrid=document.getElementById('teamGrid');
+      const rosterPanel=document.getElementById('rosterPanel');
+      const teamBanner=document.getElementById('teamBanner');
+      let selectedTeam='falcons';
+      function renderRoster(teamId){
+        const team=getTeam(teamId); if(!team)return;
+        selectedTeam=teamId;
+        teamGrid.querySelectorAll('.team-card').forEach(button=>{
+          const selected=button.dataset.team===teamId;
+          button.classList.toggle('selected',selected);
+          button.setAttribute('aria-pressed',String(selected));
+        });
+        const nextMatch=upcomingMatches.find(match=>match.a===teamId||match.b===teamId);
+        const opponent=nextMatch?getTeam(nextMatch.a===teamId?nextMatch.b:nextMatch.a):null;
+        teamBanner.style.setProperty('--team-color',team.color);
+        teamBanner.innerHTML=`<div class="banner-shape"></div><div class="banner-content"><div class="banner-label">2026 · KOREA STAGE 3</div><div class="banner-mark">${team.mark}</div><div class="banner-title">${team.name}</div><div class="banner-meta"><span>${team.status}</span><b>·</b><span>순위 ${team.place}위</span><b>·</b><span>전적 ${team.record}</span></div>${nextMatch&&opponent?`<button type="button" class="next-match-card" data-match-id="${nextMatch.id}"><span class="next-card-head"><span>다음 경기</span><span>${nextMatch.date} · ${nextMatch.weekday} · ${nextMatch.time}</span></span><span class="next-card-teams"><span><b>${team.mark}</b> ${team.name}</span><i>VS</i><span><b>${opponent.mark}</b> ${opponent.name}</span></span><span class="next-card-foot">맞대결 전적과 AI 승률 분석 보기 <strong>↗</strong></span></button>`:`<div class="next-match-card no-match"><span class="next-card-head"><span>다음 경기</span><span>STAGE 3</span></span><strong>${team.place===9?'이번 스테이지 경기 종료':'대진 확정 후 공개됩니다'}</strong></div>`}</div>`;
+        const players=Object.entries(team.players).flatMap(([role,list])=>list.map(([tag,real])=>({role,tag,real})));
+        const roleInfo={Tank:['TANK','⬟'],DPS:['DAMAGE','▥'],Support:['SUPPORT','✚']};
+        rosterPanel.innerHTML=`<div class="roster-panel-head"><div><div class="roster-kicker">ACTIVE ROSTER</div><h2>${team.name}</h2></div><div class="roster-count">로스터 <b>${players.length}명</b></div></div><div class="player-grid">${players.map(player=>{const [role,icon]=roleInfo[player.role];return `<div class="player-card"><span class="player-avatar" style="--team-color:${team.color}">${player.tag.slice(0,2)}</span><span class="player-card-info"><strong>${player.tag}</strong><small>${player.real}</small></span><span class="player-role ${player.role.toLowerCase()}"><i>${icon}</i><small>${role}</small></span></div>`;}).join('')}</div><details class="staff-details"><summary><span>스태프진 ${team.coaches.length}명</span><b>⌄</b></summary><div>${team.coaches.map(name=>`<span>${name}</span>`).join('')}</div></details><p class="roster-source">공개된 Stage 3 로스터 기준 · 선수 등록과 출전 정보는 변경될 수 있습니다.</p>`;
+      }
+      teamGrid.innerHTML = teams.map(team=>`<button type="button" class="team-card${team.id===selectedTeam?' selected':''}" data-team="${team.id}" aria-pressed="${team.id===selectedTeam}" style="--team-color:${team.color}"><span class="team-logo-wordmark">${team.mark}</span><strong>${team.name}</strong></button>`).join('');
+      renderRoster(selectedTeam);
+
+      function activatePage(pageId){
+        document.querySelectorAll('.category-panel').forEach(panel=>{
+          const active=panel.id===pageId;
+          panel.hidden=!active;
+          panel.classList.toggle('active',active);
+        });
+        document.querySelectorAll('.nav-tab').forEach(button=>{
+          const active=button.dataset.page===pageId;
+          button.classList.toggle('active',active);
+          button.setAttribute('aria-pressed',String(active));
+        });
+        window.scrollTo(0,0);
+      }
+      document.querySelectorAll('.nav-tab').forEach(button=>button.addEventListener('click',()=>activatePage(button.dataset.page)));
+      teamGrid.addEventListener('click',event=>{
+        const button=event.target.closest('[data-team]');
+        if(button)renderRoster(button.dataset.team);
+      });
+      function openMatchAnalysis(match){
+        if(!match)return;
+        const a=getTeam(match.a), b=getTeam(match.b);
+        if(!a||!b)return;
+        const [aw,al]=a.record.split('–').map(Number), [bw,bl]=b.record.split('–').map(Number);
+        const [amw,aml]=a.maps.split('–').map(Number), [bmw,bml]=b.maps.split('–').map(Number);
+        const h2h=match.h2h||{a:0,b:0,last:'확인 가능한 맞대결 기록 없음'};
+        const played=h2h.a+h2h.b;
+        const aHead=played?h2h.a/played:.5, bHead=played?h2h.b/played:.5;
+        const aStrength=.55*(aw/(aw+al))+.30*(amw/(amw+aml))+.15*aHead;
+        const bStrength=.55*(bw/(bw+bl))+.30*(bmw/(bmw+bml))+.15*bHead;
+        const aChance=Math.max(10,Math.min(90,Math.round(100*aStrength/(aStrength+bStrength))));
+        const bChance=100-aChance;
+        const favorite=aChance>=bChance?a:b;
+        document.getElementById('matchDialogTitle').textContent=`${a.short} vs ${b.short} · 경기 분석`;
+        document.getElementById('matchDialogBody').innerHTML=`<div class="analysis-fixture"><div class="analysis-team"><span class="analysis-mark" style="--team-color:${a.color}">${a.mark}</span><strong>${a.name}</strong><small>${a.record} · 맵 ${a.maps}</small><b>${aChance}%</b></div><span class="analysis-vs">VS</span><div class="analysis-team"><span class="analysis-mark" style="--team-color:${b.color}">${b.mark}</span><strong>${b.name}</strong><small>${b.record} · 맵 ${b.maps}</small><b>${bChance}%</b></div></div><div class="odds-bar"><span style="width:${aChance}%;--bar-color:${a.color}"></span><span style="width:${bChance}%;--bar-color:${b.color}"></span></div><div class="analysis-label-row"><span>AI 승률 예상</span><span>${match.date} · ${match.weekday} · ${match.time}</span></div><div class="h2h-card"><div><small>STAGE 3 상대 전적</small><strong>${a.short} ${h2h.a}승 · ${h2h.b}승 ${b.short}</strong></div><div><small>최근 맞대결</small><strong>${h2h.last}</strong></div></div><p class="analysis-explain"><b>${favorite.name}</b> 쪽을 우세로 예상해요. 팀 승률(55%), 맵 승률(30%), 이번 스테이지 상대 전적(15%)을 가중해 계산한 참고용 예측입니다.</p><p class="analysis-note">AI 데이터 분석 예상이며 공식 결과나 보장된 승률이 아닙니다. 선수 컨디션과 당일 밴픽은 계산에 포함되지 않았어요.</p>`;
+        document.getElementById('matchDialog').showModal();
+      }
+      teamBanner.addEventListener('click',event=>{
+        const button=event.target.closest('[data-match-id]');
+        if(button)openMatchAnalysis(matchesById.get(button.dataset.matchId));
+      });
+      document.getElementById('scheduleGrid').addEventListener('click',event=>{
+        const button=event.target.closest('[data-match-id]');
+        if(button)openMatchAnalysis(matchesById.get(button.dataset.matchId));
+      });
+      const matchDialog=document.getElementById('matchDialog');
+      document.getElementById('closeMatchDialog').addEventListener('click',()=>matchDialog.close());
+      matchDialog.addEventListener('click',event=>{if(event.target===matchDialog)matchDialog.close();});
+      document.querySelectorAll('#standingsBody [data-team]').forEach(row=>row.addEventListener('click',()=>{
+        renderRoster(row.dataset.team); activatePage('teams');
+      }));
+      document.querySelectorAll('#standingsBody [data-team]').forEach(row=>row.addEventListener('keydown',event=>{
+        if(event.key==='Enter'||event.key===' '){event.preventDefault();renderRoster(row.dataset.team);activatePage('teams');}
+      }));
+
+      document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
+        document.querySelectorAll('[data-filter]').forEach(item=>item.classList.toggle('active',item===button));
+        const filter=button.dataset.filter;
+        let shown=0;
+        document.querySelectorAll('.day-card').forEach(card=>{
+          const visible=filter==='all'||card.dataset.kind===filter;
+          card.style.display=visible?'':'none'; if(visible)shown++;
+        });
+        document.getElementById('scheduleEmpty').style.display=shown?'none':'block';
+      }));
+      const deadline=new Date('2026-10-30T17:00:00+09:00').getTime();
+      const countdown=document.getElementById('countdown');
+      function tick(){
+        const diff=deadline-Date.now();
+        if(diff<=0){countdown.textContent='MATCH DAY';return;}
+        const days=Math.floor(diff/86400000), hours=Math.floor(diff%86400000/3600000), mins=Math.floor(diff%3600000/60000);
+        countdown.textContent=days?`${days}D ${String(hours).padStart(2,'0')}H`:`${String(hours).padStart(2,'0')}:${String(mins).padStart(2,'0')}`;
+      }
+      tick();setInterval(tick,60000);
+    })();
+  </script>
+</body>
+</html>
